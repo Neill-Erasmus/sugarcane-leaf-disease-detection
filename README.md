@@ -1,4 +1,4 @@
-![redrot (416)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/c2413747-1ab7-43af-8462-a601f8a33558)# Sugarcane Leaf Disease Detection using a CNN
+# Sugarcane Leaf Disease Detection using a CNN
 
 Discover the capabilities of this Convolutional Neural Network (CNN) meticulously trained on a diverse dataset comprising over 2000 images. Designed to address agricultural challenges, the model excels at identifying and classifying four distinct types of sugarcane leaf diseases: RedRot, Yellow, Mosaic and Rust. This project leverages advanced deep learning techniques to provide an effective solution for automated disease detection in sugarcane crops.
 
