@@ -1,4 +1,4 @@
-# Sugarcane Leaf Disease Detection using a CNN
+![redrot (416)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/c2413747-1ab7-43af-8462-a601f8a33558)# Sugarcane Leaf Disease Detection using a CNN
 
 Discover the capabilities of this Convolutional Neural Network (CNN) meticulously trained on a diverse dataset comprising over 2000 images. Designed to address agricultural challenges, the model excels at identifying and classifying four distinct types of sugarcane leaf diseases: RedRot, Yellow, Mosaic and Rust. This project leverages advanced deep learning techniques to provide an effective solution for automated disease detection in sugarcane crops.
 
@@ -50,8 +50,9 @@ In classification tasks, a softmax activation function is commonly used in the o
 
 This process is repeated during both the forward pass (making predictions) and the backward pass (backpropagation for training) in the neural network. The convolutional layers learn to detect hierarchical features, starting from simple patterns to complex structures, enabling CNNs to excel in image-related tasks.
 
-## Dataset Overview
+![59954intro to CNN](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/e028a5e2-c9ab-4224-987e-075e0bb4ecda)
 
+## Dataset Overview
 
 A dataset of sugarcane leaf diseases was meticulously compiled through manual collection. It encompasses five primary categories: Healthy, Mosaic, Redrot, Rust, and Yellow diseases. The dataset, comprising a total of 2569 images across these categories, was captured using smartphones with diverse configurations to ensure variability. Originating from Maharashtra, India, the database maintains balance and exhibits a rich variety. Notably, image sizes are not uniform, stemming from the diverse capturing devices. All images are encoded in the RGB format.
 
@@ -59,29 +60,31 @@ A dataset of sugarcane leaf diseases was meticulously compiled through manual co
 
 Example of a healthy lead:
 
-
+![healthy (419)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/ab11ef9c-f4a2-447c-82e2-a7fea881cec6)
 
 ### Mosaic Disease
 
 Example of a leaf with mosaic disease:
 
-
+![mosaic (371)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/d7283a41-98ce-4456-b763-f2b65abaafaa)
 
 ### Redrot Disease
 
 Example of a leaf with redrot disease:
 
-
+![redrot (416)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/93784cac-146c-4342-982b-877734d2a521)
 
 ### Rust Disease
 
 Example of a leaf with rust disease:
 
-
+![rust (413)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/28d6d6e3-7263-47b7-8c9b-52b43b46361a)
 
 ### Yellow Disease
 
 Example of a leaf with yellow disease:
+
+![yellow (405)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/ca5f2dae-9fa3-42f2-b3b9-2ab2579f03a9)
 
 ## Architecture of the Convolutional Neural Network
 
@@ -92,7 +95,6 @@ The Convolutional Neural Network (CNN) architecture employed in this project is 
 The training of the Convolutional Neural Network (CNN) spanned 25 epochs, each consisting of batches processed through the dataset. During the initial epoch, the model showed a relatively low accuracy of 26.65% on the training set and 28.69% on the validation set. However, as training progressed, the accuracy improved significantly, reaching 85.04% on the training set and 73.71% on the validation set by the final epoch. The loss function, measuring the disparity between predicted and actual values, decreased over epochs, indicating learning convergence.
 
 ### Overfitting
-
 
 Overfitting occurs when a machine learning model learns the training data too well, capturing noise and specific details that are unique to the training set but may not generalize well to new, unseen data. In essence, the model becomes too tailored to the idiosyncrasies of the training data, resulting in poor performance on validation or test datasets.
 
