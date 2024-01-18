@@ -94,6 +94,59 @@ The Convolutional Neural Network (CNN) architecture employed in this project is 
 
 The training of the Convolutional Neural Network (CNN) spanned 25 epochs, each consisting of batches processed through the dataset. During the initial epoch, the model showed a relatively low accuracy of 26.65% on the training set and 28.69% on the validation set. However, as training progressed, the accuracy improved significantly, reaching 85.04% on the training set and 73.71% on the validation set by the final epoch. The loss function, measuring the disparity between predicted and actual values, decreased over epochs, indicating learning convergence.
 
+```
+Epoch 1/25
+64/64 [==============================] - 18s 275ms/step - loss: 1.5482 - accuracy: 0.2665 - val_loss: 1.6973 - val_accuracy: 0.2869
+Epoch 2/25
+64/64 [==============================] - 18s 284ms/step - loss: 1.3027 - accuracy: 0.4235 - val_loss: 1.5470 - val_accuracy: 0.4382
+Epoch 3/25
+64/64 [==============================] - 19s 298ms/step - loss: 1.1410 - accuracy: 0.5255 - val_loss: 1.3662 - val_accuracy: 0.4960
+Epoch 4/25
+64/64 [==============================] - 40s 629ms/step - loss: 1.1012 - accuracy: 0.5527 - val_loss: 1.0704 - val_accuracy: 0.6036
+Epoch 5/25
+64/64 [==============================] - 44s 696ms/step - loss: 0.9760 - accuracy: 0.6127 - val_loss: 1.1715 - val_accuracy: 0.6255
+Epoch 6/25
+64/64 [==============================] - 44s 696ms/step - loss: 0.9265 - accuracy: 0.6439 - val_loss: 1.1004 - val_accuracy: 0.6394
+Epoch 7/25
+64/64 [==============================] - 16s 249ms/step - loss: 0.8415 - accuracy: 0.6766 - val_loss: 1.1140 - val_accuracy: 0.6434
+Epoch 8/25
+64/64 [==============================] - 16s 248ms/step - loss: 0.7990 - accuracy: 0.7048 - val_loss: 1.1693 - val_accuracy: 0.6474
+Epoch 9/25
+64/64 [==============================] - 18s 276ms/step - loss: 0.8017 - accuracy: 0.6964 - val_loss: 0.9397 - val_accuracy: 0.7052
+Epoch 10/25
+64/64 [==============================] - 18s 286ms/step - loss: 0.7378 - accuracy: 0.7058 - val_loss: 0.9043 - val_accuracy: 0.7052
+Epoch 11/25
+64/64 [==============================] - 21s 323ms/step - loss: 0.7498 - accuracy: 0.7246 - val_loss: 0.9375 - val_accuracy: 0.6733
+Epoch 12/25
+64/64 [==============================] - 21s 336ms/step - loss: 0.6552 - accuracy: 0.7499 - val_loss: 1.1179 - val_accuracy: 0.6295
+Epoch 13/25
+64/64 [==============================] - 18s 288ms/step - loss: 0.6661 - accuracy: 0.7434 - val_loss: 1.0790 - val_accuracy: 0.6912
+Epoch 14/25
+64/64 [==============================] - 19s 298ms/step - loss: 0.6139 - accuracy: 0.7687 - val_loss: 0.9144 - val_accuracy: 0.7550
+Epoch 15/25
+64/64 [==============================] - 19s 293ms/step - loss: 0.5952 - accuracy: 0.7642 - val_loss: 1.1632 - val_accuracy: 0.6375
+Epoch 16/25
+64/64 [==============================] - 19s 297ms/step - loss: 0.5850 - accuracy: 0.7761 - val_loss: 0.9580 - val_accuracy: 0.7430
+Epoch 17/25
+64/64 [==============================] - 30s 478ms/step - loss: 0.5461 - accuracy: 0.7905 - val_loss: 1.2235 - val_accuracy: 0.7052
+Epoch 18/25
+64/64 [==============================] - 17s 259ms/step - loss: 0.5300 - accuracy: 0.8039 - val_loss: 1.1416 - val_accuracy: 0.7072
+Epoch 19/25
+64/64 [==============================] - 20s 305ms/step - loss: 0.5406 - accuracy: 0.7855 - val_loss: 1.2130 - val_accuracy: 0.6912
+Epoch 20/25
+64/64 [==============================] - 19s 297ms/step - loss: 0.4979 - accuracy: 0.8187 - val_loss: 0.8970 - val_accuracy: 0.7689
+Epoch 21/25
+64/64 [==============================] - 20s 308ms/step - loss: 0.4837 - accuracy: 0.8172 - val_loss: 1.2952 - val_accuracy: 0.6892
+Epoch 22/25
+64/64 [==============================] - 20s 314ms/step - loss: 0.4327 - accuracy: 0.8410 - val_loss: 1.0595 - val_accuracy: 0.7351
+Epoch 23/25
+64/64 [==============================] - 29s 461ms/step - loss: 0.4230 - accuracy: 0.8430 - val_loss: 1.2714 - val_accuracy: 0.6952
+Epoch 24/25
+64/64 [==============================] - 20s 314ms/step - loss: 0.3934 - accuracy: 0.8504 - val_loss: 0.8988 - val_accuracy: 0.7470
+Epoch 25/25
+64/64 [==============================] - 27s 419ms/step - loss: 0.4222 - accuracy: 0.8504 - val_loss: 0.9571 - val_accuracy: 0.7371
+```
+
 ### Overfitting
 
 Overfitting occurs when a machine learning model learns the training data too well, capturing noise and specific details that are unique to the training set but may not generalize well to new, unseen data. In essence, the model becomes too tailored to the idiosyncrasies of the training data, resulting in poor performance on validation or test datasets.
