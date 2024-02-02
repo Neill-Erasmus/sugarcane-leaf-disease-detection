@@ -50,7 +50,10 @@ In classification tasks, a softmax activation function is commonly used in the o
 
 This process is repeated during both the forward pass (making predictions) and the backward pass (backpropagation for training) in the neural network. The convolutional layers learn to detect hierarchical features, starting from simple patterns to complex structures, enabling CNNs to excel in image-related tasks.
 
-![59954intro to CNN](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/e028a5e2-c9ab-4224-987e-075e0bb4ecda)
+<p align="center">
+    <img src="https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/e028a5e2-c9ab-4224-987e-075e0bb4ecda" alt="59954intro to CNN">
+</p>
+
 
 ## Dataset Overview
 
@@ -60,31 +63,41 @@ A dataset of sugarcane leaf diseases was meticulously compiled through manual co
 
 Example of a healthy lead:
 
-![healthy (419)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/ab11ef9c-f4a2-447c-82e2-a7fea881cec6)
+<p align="center">
+    <img src="https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/ab11ef9c-f4a2-447c-82e2-a7fea881cec6">
+</p>
 
 ### Mosaic Disease
 
 Example of a leaf with mosaic disease:
 
-![mosaic (371)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/d7283a41-98ce-4456-b763-f2b65abaafaa)
+<p align="center">
+    <img src="https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/d7283a41-98ce-4456-b763-f2b65abaafaa">
+</p>
 
 ### Redrot Disease
 
 Example of a leaf with redrot disease:
 
-![redrot (416)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/93784cac-146c-4342-982b-877734d2a521)
+<p align="center">
+    <img src="https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/93784cac-146c-4342-982b-877734d2a521">
+</p>
 
 ### Rust Disease
 
 Example of a leaf with rust disease:
 
-![rust (413)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/28d6d6e3-7263-47b7-8c9b-52b43b46361a)
+<p align="center">
+    <img src="https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/28d6d6e3-7263-47b7-8c9b-52b43b46361a">
+</p>
 
 ### Yellow Disease
 
 Example of a leaf with yellow disease:
 
-![yellow (405)](https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/ca5f2dae-9fa3-42f2-b3b9-2ab2579f03a9)
+<p align="center">
+    <img src="https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection/assets/141222943/ca5f2dae-9fa3-42f2-b3b9-2ab2579f03a9">
+</p>
 
 ## Architecture of the Convolutional Neural Network
 
