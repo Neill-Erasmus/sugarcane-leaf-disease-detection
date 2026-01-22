@@ -79,6 +79,8 @@ python -m src.training.train
 
 3. experiments/checkpoints/baseline_cnn_best.pth
 
+---
+
 ## Evaluation
 
 1. Run the evaluation script:
@@ -91,6 +93,8 @@ python -m src.training.train
 - Confusion matrix
 
 3. These metrics form the baseline performance for comparison with future model upgrades.
+
+---
 
 ## Baseline Results
 
@@ -112,6 +116,8 @@ python -m src.training.train
  [ 9  2  7 83  1]
  [ 1  5  1  0 94]]
  ```
+
+ ---
 
 ## Notes
 
