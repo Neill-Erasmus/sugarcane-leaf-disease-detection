@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# PyTorch / ML
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.log
+*.tensorboard
+*.tfevents.*
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Logs / experiments
+experiments/logs/
+experiments/runs/
+*.csv
+*.tsv
+
+# Dataset temp files
+data/*.zip
+data/*.tar

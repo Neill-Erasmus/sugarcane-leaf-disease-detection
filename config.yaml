@@ -1,0 +1,6 @@
+batch_size: 32
+learning_rate: 0.001
+epochs: 20
+input_size: 256
+num_classes: 5
+checkpoint_dir: experiments/checkpoints
