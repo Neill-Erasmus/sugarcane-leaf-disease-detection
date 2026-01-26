@@ -1,52 +1,48 @@
-import json
 import torch
-from pathlib import Path
-from torchvision import transforms
-from torch.utils.data import DataLoader
-from torchvision.datasets import ImageFolder
+import json
+import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix
 from src.models.resnet_transfer import ResNetTransfer
-
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-EXPERIMENT_DIR = Path("experiments/resnet_frozen")
-CHECKPOINT_PATH = Path("experiments/checkpoints/resnet_frozen_best.pth")
+from src.data.data_loaders import get_dataloaders
 
 def evaluate():
-    tfms = transforms.Compose([
-        transforms.Resize((256, 256)),
-        transforms.ToTensor()
-    ])
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    test_ds = ImageFolder("data/test", transform=tfms)
-    test_loader = DataLoader(test_ds, batch_size=32)
+    _, _, test_loader = get_dataloaders(batch_size=32)
 
-    model = ResNetTransfer(num_classes=5, freeze_backbone=True).to(DEVICE)
-    model.load_state_dict(torch.load(CHECKPOINT_PATH, map_location=DEVICE))
+    model = ResNetTransfer(num_classes=5)
+    model.to(device)
+
+    checkpoint_path = "experiments/resnet_frozen/checkpoints/resnet_frozen_best.pth"
+    model.load_state_dict(torch.load(checkpoint_path, map_location=device))
     model.eval()
 
-    y_true, y_pred = [], []
+    all_preds, all_labels = [], []
 
     with torch.no_grad():
         for images, labels in test_loader:
-            images = images.to(DEVICE)
+            images, labels = images.to(device), labels.to(device)
             outputs = model(images)
-            _, preds = torch.max(outputs, 1)
+            preds = torch.argmax(outputs, dim=1)
 
-            y_true.extend(labels.tolist())
-            y_pred.extend(preds.cpu().tolist())
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
 
-    report = classification_report(y_true, y_pred, target_names=test_ds.classes, output_dict=True)
-    matrix = confusion_matrix(y_true, y_pred)
+    report = classification_report(all_labels, all_preds, output_dict=True)
+    cm = confusion_matrix(all_labels, all_preds)
 
-    with open(EXPERIMENT_DIR / "metrics.json", "w") as f:
+    # Save metrics
+    with open("experiments/resnet_frozen/metrics.json", "w") as f:
         json.dump(report, f, indent=4)
 
-    with open(EXPERIMENT_DIR / "confusion_matrix.txt", "w") as f:
-        f.write(str(matrix))
+    # Save confusion matrix
+    np.savetxt(
+        "experiments/resnet_frozen/confusion_matrix.txt",
+        cm,
+        fmt="%d"
+    )
 
-    print(classification_report(y_true, y_pred, target_names=test_ds.classes))
-    print("\nConfusion Matrix:\n", matrix)
+    print("Evaluation complete — results saved to experiments/resnet_frozen/")
 
 if __name__ == "__main__":
     evaluate()

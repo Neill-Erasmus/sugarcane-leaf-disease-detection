@@ -1,4 +1,3 @@
-# src/evaluation/evaluate.py
 import torch
 import os
 import json
