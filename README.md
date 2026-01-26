@@ -123,3 +123,125 @@ python -m src.training.train
 
 - Baseline CNN is intended for initial benchmarking.
 - Next steps: upgrade to transfer learning with ResNet/EfficientNet for higher accuracy and real-world robustness.
+
+---
+
+## Transfer Learning: ResNet-50 (Frozen Backbone)
+
+After establishing a baseline using a custom CNN, a transfer learning approach was implemented using a pretrained **ResNet-50** model. The motivation was to leverage strong general-purpose visual features learned from ImageNet and adapt them to the sugarcane leaf disease classification task.
+
+---
+
+### Model Architecture
+
+---
+
+- Backbone: **ResNet-50 pretrained on ImageNet**
+- Modification:
+  - Final fully connected layer replaced with a linear layer matching the number of disease classes (5)
+- Training strategy:
+  - **All ResNet backbone layers frozen**
+  - Only the final classification head trained
+
+This setup allows fast convergence while evaluating how well pretrained features generalize to agricultural imagery without domain-specific fine-tuning.
+
+---
+
+### Training Configuration
+
+---
+
+- Input size: `224 × 224`
+- Optimizer: Adam
+- Loss function: CrossEntropyLoss
+- Learning rate: `1e-3`
+- Epochs: `15`
+- Data augmentation:
+  - Random horizontal flip
+  - Random rotation
+  - Normalization using ImageNet statistics
+
+Training was executed using:
+
+```bash
+python -m src.training.train_resnet
+```
+
+The best-performing model checkpoint was saved automatically during training.
+
+---
+
+## Training Performance
+
+| Epoch | Validation Accuracy |
+|---|---|
+| 1 | 0.476 |
+| 3 | 0.695|
+|5| 0.730|
+|8|0.752|
+|11|0.777|
+|15|0.749|
+
+The model converged rapidly, indicating effective reuse of pretrained features.
+
+---
+
+## Evaluation Results
+Evaluation was performed on a held-out test set using:
+```
+python -m src.evaluation.evaluate_resnet
+```
+
+## Classification Report
+
+|Class|Precision|Recall|F1-Score|
+|---|---|---|---|
+|Healthy|1.00|0.41|0.59|
+|Mosaic|0.63|0.97|0.76|
+|RedRot|0.73|0.87|0.80|
+|Rust|0.93|0.91|0.92|
+|Yellow|0.85|0.79|0.82|
+
+- Overall accuracy: 0.79
+- Macro F1-score: 0.78
+- Weighted F1-score: 0.78
+
+---
+
+## Confusion Matrix
+```
+[[43 41 17  1  2]
+ [ 0 89  0  0  3]
+ [ 0  0 90  5  8]
+ [ 0  4  4 93  1]
+ [ 0  8 12  1 80]]
+```
+
+---
+
+## Comparison to Baseline CNN
+
+|Model|Accuracy|Macro F1|
+|---|---|---|
+|Baseline CNN|0.75|0.74|
+|ResNet-50 (Frozen)|0.79|0.78|
+
+The frozen ResNet-50 model outperforms the baseline CNN, particularly on Rust, RedRot, and Yellow disease classes.
+
+However, a notable weakness is observed in the Healthy class, where recall is low. This suggests that while pretrained ImageNet features are effective, they are not fully adapted to domain-specific visual patterns in sugarcane leaves.
+
+---
+
+## Key Observations
+
+- Transfer learning provides a clear performance gain over a custom CNN
+- Frozen backbones converge quickly but may struggle with subtle domain-specific distinctions
+- Significant confusion remains between Healthy and Mosaic leaves
+
+---
+
+## Next Steps
+
+- Fine-tune the deeper layers of ResNet-50 (starting with layer4)
+- Reduce learning rate for stable fine-tuning
+- Evaluate whether domain adaptation improves Healthy-class recall and overall performance
