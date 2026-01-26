@@ -31,11 +31,9 @@ def evaluate():
     report = classification_report(all_labels, all_preds, output_dict=True)
     cm = confusion_matrix(all_labels, all_preds)
 
-    # Save metrics
     with open("experiments/resnet_frozen/metrics.json", "w") as f:
         json.dump(report, f, indent=4)
 
-    # Save confusion matrix
     np.savetxt(
         "experiments/resnet_frozen/confusion_matrix.txt",
         cm,

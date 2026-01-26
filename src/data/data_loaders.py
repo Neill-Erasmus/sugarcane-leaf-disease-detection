@@ -1,19 +1,7 @@
-import torch
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 def get_dataloaders(batch_size=32, img_size=256):
-    """
-    Returns train, validation, and test dataloaders with configurable image size.
-
-    Args:
-        batch_size (int): Batch size for all loaders
-        img_size (int): Height and width to resize images
-
-    Returns:
-        train_loader, val_loader, test_loader
-    """
-
     train_transforms = transforms.Compose([
         transforms.Resize((img_size, img_size)),
         transforms.RandomHorizontalFlip(),

@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -10,7 +9,7 @@ class BaselineCNN(nn.Module):
         self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
         self.pool = nn.MaxPool2d(2,2)
         self.dropout = nn.Dropout(0.3)
-        self.fc1 = nn.Linear(128*32*32, 256)  # assuming input 256x256
+        self.fc1 = nn.Linear(128*32*32, 256)
         self.fc2 = nn.Linear(256, num_classes)
         
     def forward(self, x):
