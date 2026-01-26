@@ -9,8 +9,6 @@ env/
 .venv/
 
 # PyTorch / ML
-*.pt
-*.pth
 *.ckpt
 *.h5
 *.log
