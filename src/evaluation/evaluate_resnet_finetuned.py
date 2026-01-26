@@ -1,41 +1,58 @@
 import torch
+import json
+import numpy as np
+from pathlib import Path
 from sklearn.metrics import classification_report, confusion_matrix
+
 from src.models.resnet50_finetuned import ResNet50FineTuned
 from src.data.data_loaders import get_dataloaders
+
 
 def evaluate():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    _, _, test_loader = get_dataloaders(
-        img_size=224,
-        batch_size=32
-    )
+    # Model
+    model = ResNet50FineTuned(num_classes=5)
+    model.to(device)
 
-    model = ResNet50FineTuned(num_classes=5).to(device)
-    model.load_state_dict(
-        torch.load(
-            "experiments/checkpoints/resnet50_finetuned_best.pth",
-            map_location=device
-        )
+    checkpoint_path = (
+        "experiments/resnet_finetuned/checkpoints/"
+        "resnet50_finetuned_best.pth"
     )
-
+    model.load_state_dict(torch.load(checkpoint_path, map_location=device))
     model.eval()
-    all_preds, all_labels = [], []
+
+    # Data
+    _, _, test_loader = get_dataloaders(batch_size=32)
+
+    y_true, y_pred = [], []
 
     with torch.no_grad():
         for images, labels in test_loader:
             images, labels = images.to(device), labels.to(device)
             outputs = model(images)
-            _, preds = torch.max(outputs, 1)
+            preds = torch.argmax(outputs, dim=1)
 
-            all_preds.extend(preds.cpu().numpy())
-            all_labels.extend(labels.cpu().numpy())
+            y_true.extend(labels.cpu().numpy())
+            y_pred.extend(preds.cpu().numpy())
 
-    print("Classification Report:\n")
-    print(classification_report(all_labels, all_preds))
+    # Metrics
+    report = classification_report(y_true, y_pred, output_dict=True)
+    conf_matrix = confusion_matrix(y_true, y_pred)
 
-    print("Confusion Matrix:\n")
-    print(confusion_matrix(all_labels, all_preds))
+    exp_dir = Path("experiments/resnet_finetuned")
+
+    # Save confusion matrix
+    with open(exp_dir / "confusion_matrix.txt", "w") as f:
+        f.write(np.array2string(conf_matrix))
+
+    # Save metrics
+    with open(exp_dir / "metrics.json", "w") as f:
+        json.dump(report, f, indent=4)
+
+    print("Evaluation complete.")
+    print("Results saved to experiments/resnet_finetuned/")
+
 
 if __name__ == "__main__":
     evaluate()
