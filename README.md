@@ -15,11 +15,7 @@ This repository demonstrates:
 ## Dataset
 - The dataset consists of RGB images organized into `train/`, `val/`, and `test/` folders.  
 - Class distribution:
-  - Healthy: XXX images
-  - Mosaic: XXX images
-  - RedRot: XXX images
-  - Rust: XXX images
-  - Yellow: XXX images
+  - Exact image counts have been omitted but class balance is approximately uniform.
 - Data splits:
   - Train: 80%
   - Validation: 20% (from original train set)
@@ -31,11 +27,12 @@ This repository demonstrates:
 
 ## Folder Structure
 
+```
 sugarcane-leaf-disease-detection/  
 ├── data/ # train, val, test images  
 ├── src/  
 │ ├── data/ # Data loaders  
-│ ├── models/ # Baseline CNN  
+│ ├── models/ # Baseline CNN, ResNet (Frozen and Fine-Tuned) 
 │ ├── training/ # Training script  
 │ └── evaluation/ # Evaluation script  
 ├── experiments/ # Checkpoints, logs  
@@ -45,7 +42,7 @@ sugarcane-leaf-disease-detection/
 ├── requirements.txt  
 ├── config.yaml # Hyperparameters and paths  
 └── README.md
-
+```
 ---
 
 ## Baseline Model
@@ -75,9 +72,9 @@ python -m src.training.train
 
 2. The best model checkpoint is automatically saved to:
 
-```experiments/checkpoints/baseline_cnn_best.pth```
-
-3. experiments/checkpoints/baseline_cnn_best.pth
+```
+experiments/baseline_cnn/checkpoints/baseline_cnn_best.pth
+```
 
 ---
 
@@ -245,3 +242,140 @@ However, a notable weakness is observed in the Healthy class, where recall is lo
 - Fine-tune the deeper layers of ResNet-50 (starting with layer4)
 - Reduce learning rate for stable fine-tuning
 - Evaluate whether domain adaptation improves Healthy-class recall and overall performance
+
+---
+
+## Transfer Learning: ResNet-50 (Fine-Tuned)
+
+To address the limitations observed with the frozen ResNet-50 model—particularly poor recall for the Healthy class—a fine-tuning strategy was implemented.
+
+Rather than training only the classification head, the deepest convolutional layers of the network were unfrozen to allow domain-specific feature adaptation.
+
+## Fine Tuning Strategy
+
+- Base model: ResNet-50 pretrained on ImageNet
+- Layers frozen:
+  - All layers except layer4
+- Layers trained:
+  - layer4
+  - Final fully connected classification layer
+- Motivation:
+  - Preserve general low-level visual features
+  - Adapt high-level semantic features to sugarcane leaf textures and disease patterns
+
+## Training Configuration (Fine-Tuned)
+
+- Input size: 224 × 224
+- Optimizer: Adam
+- Loss function: CrossEntropyLoss
+- Learning rate: 1e-4
+- Epochs: 10
+- Batch size: 32
+- Data augmentation:
+  - Random horizontal flip
+  - Random rotation
+  - Color jitter
+  - ImageNet normalization
+
+Training command:
+```
+python -m src.training.train_resnet_finetuned
+```
+The best-performing model was automatically saved to:
+```
+experiments/resnet_finetuned/checkpoints/resnet50_finetuned_best.pth
+```
+
+## Fine-Tuned Training Performance
+
+|Epoch|Validation Accuracy|
+|---|---|
+|1|0.873|
+|2|0.913|
+|3|0.906|
+|6|0.916|
+|9|0.921|
+|10|0.931|
+
+Fine-tuning resulted in rapid convergence and strong generalization, with minimal overfitting.
+
+## Fine-Tuned Evaluation Results
+
+Evaluation was performed on the held-out test set using:
+
+```
+python -m src.evaluation.evaluate_resnet_finetuned
+```
+
+## Classification Report
+
+|Class|Precision|Recall|F1-Score|
+|---|---|---|---|
+|Healthy|0.97|0.99|0.98|
+|Mosaic|0.98|0.98|0.98|
+|RedRot|0.96|0.97|0.97|
+|Rust|0.98|0.96|0.97|
+|Yellow|0.99|0.98|0.99|
+
+- Overall Accuracy: 0.98
+- Macro F1-Score: 0.98
+- Weighted F1-Score: 0.98
+
+## Confusion Matrix
+
+```
+[[103   1   0   0   0]
+ [  2  90   0   0   0]
+ [  0   0 100   2   1]
+ [  1   0   3  98   0]
+ [  0   1   1   0  99]]
+```
+
+The fine-tuned model shows near-perfect separation between all disease classes and resolves the Healthy/Mosaic confusion observed in earlier models.
+
+## Model Comparison Summary
+
+|Model|Accuracy|Macro F1|
+|---|---|---|
+|Baseline CNN|0.75|0.74|
+|ResNet-50 (Frozen)|0.79|0.78|
+|ResNet-50 (Fine-Tuned)|0.98|0.98|
+
+## Key Findings
+
+- Transfer learning significantly improves performance over a custom CNN
+- Freezing the backbone provides quick gains but limits domain adaptation
+- Fine-tuning higher-level layers yields dramatic performance improvements
+- Agricultural imagery benefits strongly from domain-specific feature refinement
+
+## Experiments & Reproducibility
+
+All experiments are stored in a structured and reproducible format:
+
+```
+experiments/
+├── baseline_cnn/
+│   ├── checkpoints/
+│   ├── confusion_matrix.txt
+│   ├── metrics.json
+│   └── notes.md
+├── resnet_frozen/
+│   ├── checkpoints/
+│   ├── confusion_matrix.txt
+│   ├── metrics.json
+│   └── notes.md
+└── resnet_finetuned/
+    ├── checkpoints/
+    ├── confusion_matrix.txt
+    ├── metrics.json
+    └── notes.md
+```
+
+Each experiment folder contains:
+- Best model checkpoint
+- Full evaluation metrics in machine-readable format
+- Confusion matrix
+- Experiment notes and observations
+
+## Inference
+
