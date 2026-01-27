@@ -1,68 +1,71 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from tqdm import tqdm
 from src.models.resnet50_finetuned import ResNet50FineTuned
 from src.data.data_loaders import get_dataloaders
+from pathlib import Path
+import yaml
+from tqdm import tqdm
+import json
 
-def train():
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
-    train_loader, val_loader, _ = get_dataloaders(
-        img_size=224,
-        batch_size=32
-    )
+BATCH_SIZE = config["batch_size"]
+LR = 1e-4
+EPOCHS = 10
+NUM_CLASSES = config["num_classes"]
+IMG_SIZE = config["input_size"]
+CHECKPOINT_PATH = Path(config["checkpoints"]["resnet_finetuned"])
+EXP_DIR = Path(config["experiments"]["resnet_finetuned"])
+EXP_DIR.mkdir(parents=True, exist_ok=True)
 
-    model = ResNet50FineTuned(num_classes=5).to(device)
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+def train() -> None:
+    """Train fine-tuned ResNet50 on sugarcane leaf dataset."""
+    train_loader, val_loader, _ = get_dataloaders(batch_size=BATCH_SIZE, img_size=IMG_SIZE)
+
+    model = ResNet50FineTuned(num_classes=NUM_CLASSES).to(DEVICE)
     criterion = nn.CrossEntropyLoss()
-
-    optimizer = optim.Adam(
-        filter(lambda p: p.requires_grad, model.parameters()),
-        lr=1e-4
-    )
+    optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=LR)
 
     best_val_acc = 0.0
-    epochs = 10
 
-    for epoch in range(epochs):
+    for epoch in range(EPOCHS):
         model.train()
         running_loss = 0.0
-
-        for images, labels in tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs}"):
-            images, labels = images.to(device), labels.to(device)
-
+        for images, labels in tqdm(train_loader, desc=f"Epoch {epoch+1}/{EPOCHS}"):
+            images, labels = images.to(DEVICE), labels.to(DEVICE)
             optimizer.zero_grad()
             outputs = model(images)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
+            running_loss += loss.item() * images.size(0)
 
-            running_loss += loss.item()
-
-        avg_loss = running_loss / len(train_loader)
+        epoch_loss = running_loss / len(train_loader.dataset)
 
         model.eval()
-        correct, total = 0, 0
-
+        correct = 0
+        total = 0
         with torch.no_grad():
             for images, labels in val_loader:
-                images, labels = images.to(device), labels.to(device)
+                images, labels = images.to(DEVICE), labels.to(DEVICE)
                 outputs = model(images)
                 _, preds = torch.max(outputs, 1)
                 correct += (preds == labels).sum().item()
                 total += labels.size(0)
-
         val_acc = correct / total
 
-        print(f"Epoch {epoch+1}/{epochs}, Loss: {avg_loss:.4f}, Val Acc: {val_acc:.4f}")
+        print(f"Epoch {epoch+1}/{EPOCHS}, Loss: {epoch_loss:.4f}, Val Acc: {val_acc:.4f}")
 
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save(
-                model.state_dict(),
-                "experiments/checkpoints/resnet50_finetuned_best.pth"
-            )
+            torch.save(model.state_dict(), CHECKPOINT_PATH)
+
+    with open(EXP_DIR / "metrics.json", "w") as f:
+        json.dump({"best_val_accuracy": best_val_acc}, f, indent=4)
 
 if __name__ == "__main__":
     train()
