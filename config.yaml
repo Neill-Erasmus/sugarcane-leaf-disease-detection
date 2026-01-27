@@ -1,7 +1,20 @@
+# === Training Parameters ===
 batch_size: 32
 learning_rate: 0.001
 epochs: 20
 input_size: 256
 num_classes: 5
 
+# === Model Checkpoints ===
 checkpoint_path: experiments/resnet_finetuned/checkpoints/resnet50_finetuned_best.pth
+
+# === API Parameters ===
+accepted_image_formats:
+  - image/jpeg
+  - image/png
+
+# === Dataset Paths ===
+data_paths:
+  train: data/train
+  val: data/val
+  test: data/test
