@@ -1,0 +1,11 @@
+.git
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+notebooks/
+data/
+experiments/**/confusion_matrix.txt
+experiments/**/metrics.json
+experiments/**/notes.md
