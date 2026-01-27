@@ -1,34 +1,34 @@
-# === Training Parameters ===
+#training parameters
 batch_size: 32
 learning_rate: 0.001
 epochs: 20
 input_size: 256
 num_classes: 5
 
-# === Model Checkpoints ===
+#model checkpoints
 checkpoints:
   baseline_cnn: experiments/baseline_cnn/checkpoints/baseline_cnn_best.pth
   resnet_frozen: experiments/resnet_frozen/checkpoints/resnet_frozen_best.pth
   resnet_finetuned: experiments/resnet_finetuned/checkpoints/resnet50_finetuned_best.pth
 
-# === API Parameters ===
+#api parameters
 accepted_image_formats:
   - image/jpeg
   - image/png
 
-# === Dataset Paths ===
+#dataset paths
 data_paths:
   train: data/train
   val: data/val
   test: data/test
 
-# === Experiment Output Paths ===
+#experiment output paths
 experiments:
   baseline_cnn: experiments/baseline_cnn
   resnet_frozen: experiments/resnet_frozen
   resnet_finetuned: experiments/resnet_finetuned
 
-# === Model Architecture Parameters ===
+#model architecture parameters
 baseline_cnn:
   dropout: 0.3
   hidden_fc_size: 256
@@ -36,7 +36,3 @@ baseline_cnn:
 resnet_transfer:
   dropout: 0.5
   hidden_fc_size: 512
-
-resnet_finetuned:
-  # No extra params; handled in model class
-  pass
