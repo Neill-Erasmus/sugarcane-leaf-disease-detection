@@ -3,4 +3,5 @@ learning_rate: 0.001
 epochs: 20
 input_size: 256
 num_classes: 5
-checkpoint_dir: experiments/checkpoints
+
+checkpoint_path: experiments/resnet_finetuned/checkpoints/resnet50_finetuned_best.pth
