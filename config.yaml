@@ -27,3 +27,16 @@ experiments:
   baseline_cnn: experiments/baseline_cnn
   resnet_frozen: experiments/resnet_frozen
   resnet_finetuned: experiments/resnet_finetuned
+
+# === Model Architecture Parameters ===
+baseline_cnn:
+  dropout: 0.3
+  hidden_fc_size: 256
+
+resnet_transfer:
+  dropout: 0.5
+  hidden_fc_size: 512
+
+resnet_finetuned:
+  # No extra params; handled in model class
+  pass
