@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from api.model import load_model, predict as model_predict
 from PIL import UnidentifiedImageError
-
+ 
 app = FastAPI(title="Sugarcane Leaf Disease Detection API")
 
 @app.on_event("startup")

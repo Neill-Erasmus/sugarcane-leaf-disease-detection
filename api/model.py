@@ -5,7 +5,7 @@ from PIL import Image
 import io
 import yaml
 import os
-
+ 
 CONFIG_PATH = "config.yaml"
 if os.path.exists(CONFIG_PATH):
     with open(CONFIG_PATH, "r") as f:
