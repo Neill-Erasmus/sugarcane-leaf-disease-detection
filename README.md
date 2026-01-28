@@ -1,5 +1,9 @@
 # Sugarcane Leaf Disease Detection
 
+![Python](https://img.shields.io/badge/python-3.10-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-red)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+
 ## Project Overview
 This project implements a computer vision system for detecting diseases in sugarcane leaves.
 
