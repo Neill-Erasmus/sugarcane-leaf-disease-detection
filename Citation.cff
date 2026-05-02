@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: Sugarcane Leaf Disease Detection
+message: "If you use this software, please cite it using these metadata."
+authors:
+  - family-names: "Erasmus"
+    given-names: "Neill Jean"
+type: software
+repository-code: "https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection"
+url: "https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection"
+abstract: "A computer vision system for detecting diseases in sugarcane leaves using deep learning. Implements and compares three models: baseline CNN, ResNet-50 with frozen weights, and ResNet-50 with fine-tuned weights. Achieves 98% accuracy with fine-tuned ResNet-50."
+keywords:
+  - computer-vision
+  - deep-learning
+  - agriculture
+  - disease-detection
+  - pytorch
+  - transfer-learning
+  - sugarcane
+
+license: MIT
+version: 1.0.0
+date-released: 2026-05-02

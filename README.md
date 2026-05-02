@@ -4,21 +4,37 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-red)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 
+A compact toolkit for detecting diseases in sugarcane leaves using deep learning (classification into Healthy, Mosaic, RedRot, Rust, Yellow).
+
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Folder Structure](#folder-structure)
+- [Tech Stack](#tech-stack)
+- [Dataset](#dataset)
+- [Setup / Installation](#setup--installation)
+- [Quick Start](#quick-start)
+- [Running the API](#running-the-api)
+- [Running with Docker](#running-with-docker)
+- [Training and Evaluation](#training-and-evaluation)
+- [Results Summary](#results-summary)
+- [Configuration](#configuration)
+- [Contributing](#contributing)
+- [Citation](#citation)
+- [License](#license)
+
 ## Project Overview
-This project implements a computer vision system for detecting diseases in sugarcane leaves.
 
-**Motivation:** Sugarcane is a critical agricultural crop, and early detection of leaf diseases can significantly improve yield and reduce crop loss. This project demonstrates how deep learning and computer vision can be applied to agricultural disease diagnosis, bridging real-world impact with modern ML engineering practices.
-
-**Objective:** classify sugarcane leaves into five categories: Healthy, Mosaic, RedRot, Rust, Yellow
+This repository implements a computer-vision pipeline and API for sugarcane leaf disease classification. It demonstrates training, evaluation, and deployment patterns for image classification using PyTorch and FastAPI.
 
 ## Folder Structure
 
 ```
 sugarcane-leaf-disease-detection/
-├── api/                 #FastAPI
-├── data/                #train / val / test image folders
-├── experiments/         #checkpoints, metrics,confusion matrices
-├── src/                 #training, evaluation, models, data loaders
+├── api/                 # FastAPI application and model serving
+├── data/                # train / val / test image folders
+├── experiments/         # checkpoints, metrics, confusion matrices
+├── src/                 # training, evaluation, models, data loaders
 ├── Dockerfile
 ├── requirements.txt
 ├── config.yaml
@@ -34,108 +50,102 @@ sugarcane-leaf-disease-detection/
 - NumPy, scikit-learn
 
 ## Dataset
-- The dataset consists of images organized into `train/`, `val/`, and `test/` folders.  
-- Data splits:
-  - Train: 80%
-  - Validation: 20% (from original train set)
-  - Test: separate untouched set
+
+- Images are organized into `train/`, `val/`, and `test/` folders under `data/`.
+- Typical split: Train ~80%, Validation ~20% (from training set), Test = held-out set.
 
 ## Setup / Installation
 
-```
-git clone https://github.com/yourusername/sugarcane-leaf-disease-detection.git
+Clone and install dependencies:
+
+```bash
+git clone https://github.com/Neill-Erasmus/sugarcane-leaf-disease-detection.git
 cd sugarcane-leaf-disease-detection
 
-#create virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux/macOS
-venv\Scripts\activate     # Windows
+venv\Scripts\activate    # Windows
 
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Running the API
+## Quick Start
 
-The API loads the best-performing trained model from the experiments/ directory as specified in config.yaml.
+Run the API locally (serves the model from `experiments/` as configured in `config.yaml`):
 
-```
+```bash
 uvicorn api.app:app --host 0.0.0.0 --port 8000
 ```
-- **Endpoint:** /predict (POST)
-- **Request:** form-data with file field containing an image (jpg or png)
-- **Response Example:**
+
+Test prediction with curl:
+
+```bash
+curl -X POST "http://localhost:8000/predict" -F "file=@/path/to/image.jpg"
 ```
+
+## Running the API
+
+The API exposes `/predict` (POST) which accepts an image file and returns the predicted class and class probabilities.
+
+Example response:
+
+```json
 {
   "predicted_class": "RedRot",
-  "probabilities": {
-    "Healthy": 0.01,
-    "Mosaic": 0.02,
-    "RedRot": 0.93,
-    "Rust": 0.03,
-    "Yellow": 0.01
-  }
+  "probabilities": {"Healthy": 0.01, "Mosaic": 0.02, "RedRot": 0.93, "Rust": 0.03, "Yellow": 0.01}
 }
 ```
 
 ## Running with Docker
-**Build and run the container:**
 
-```
+Build and run:
+
+```bash
 docker build -t sugarcane-api .
-
 docker run -d -p 8000:8000 --name sugarcane-api-container sugarcane-api
 ```
 
-**Access API at:** ```http://localhost:8000/docs#/default/predict_disease_predict_post```
+Stop and remove container:
 
-**Stop and remove container when done:**
-```
-docker stop sugarcane-api-container
-
-docker rm sugarcane-api-container
+```bash
+docker stop sugarcane-api-container && docker rm sugarcane-api-container
 ```
 
 ## Training and Evaluation
 
-```
-#train models
-python src/training/train.py                  
-python src/training/train_resnet.py           
-python src/training/train_resnet_finetuned.py 
+Train and evaluate using provided scripts:
 
-#evaluate models
+```bash
+# Train
+python src/training/train.py
+python src/training/train_resnet.py
+python src/training/train_resnet_finetuned.py
+
+# Evaluate
 python src/evaluation/evaluate.py
 python src/evaluation/evaluate_resnet.py
 python src/evaluation/evaluate_resnet_finetuned.py
 ```
 
-- Trained models and metrics are stored in experiments/ folder
-- Use config.yaml to adjust hyperparameters, batch size, epochs, and paths
+Trained artifacts and metrics are stored under `experiments/`.
 
 ## Results Summary
 
-|Model|Accuracy|Macro F1|
-|---|---|---|
-|Baseline CNN|0.75|0.74|
-|ResNet-50 (Frozen)|0.79|0.78|
-|ResNet-50 (Fine-Tuned)|0.98|0.98|
-
-- Fine-tuned ResNet-50 resolves Healthy/Mosaic confusion and achieves near-perfect classification.
-
-## Key Observations
-
-- Transfer learning boosts performance significantly
-- Freezing backbone allows fast convergence but limits domain adaptation
-- Fine-tuning deeper layers yields best results
+| Model | Accuracy | Macro F1 |
+|---|---:|---:|
+| Baseline CNN | 0.75 | 0.74 |
+| ResNet-50 (Frozen) | 0.79 | 0.78 |
+| ResNet-50 (Fine-Tuned) | 0.98 | 0.98 |
 
 ## Configuration
 
-All key parameters are defined in `config.yaml`, including:
+All key parameters (hyperparameters, paths, checkpoint locations) are configured in `config.yaml`.
 
-- Training hyperparameters (batch size, learning rate, epochs)
-- Dataset paths
-- Model checkpoint paths
-- API input constraints
+## Contributing
 
-This allows easy experimentation without modifying code.
+See [CONTRIBUTING.md](Contributing.md) for contribution guidelines, code style, and the development workflow. We welcome issues, pull requests, and documentation improvements.
+
+## License
+
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
